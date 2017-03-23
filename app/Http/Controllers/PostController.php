@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Post;
+use Session;
 
 class PostController extends Controller
 {
@@ -42,15 +43,18 @@ class PostController extends Controller
                 'body' => 'required'
             ));
 
-
-        $post = new Post; 
+       // Post::create($request->only('title','body')); // This line does the same as all under here, until its runs "save".
+        $post = new Post; // For this to work you have to add "use App\Post;" to the top of the controller to be able to talk with the Post model
 
         $post->title = $request->title; 
         $post->body = $request->body;
         $post->save();
 
+        // Session::flash('key', 'value')
+        Session::flash('success', 'The blog post was successfully saved!'); // for this to work I have to add "use Session;" to the file
+
         // redirect to another view
-        return redirect()->route('posts.show', $post->id);
+        return redirect()->route('posts.show', $post->id); // this sets the URL to /posts/{post-id}
     }
 
     /**
@@ -61,7 +65,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Post::find($id);
+        return view('posts.show')->withPost($post);
     }
 
     /**

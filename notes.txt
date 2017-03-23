@@ -1,0 +1,2 @@
+1. For Client-side js-validation I used parsley -> http://parsleyjs.org/doc/index.html 
+
